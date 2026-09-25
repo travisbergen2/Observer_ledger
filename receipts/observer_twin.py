@@ -483,6 +483,25 @@ def build(selftest: bool) -> dict:
                           "frac_positive": sum(1 for x in rows if x["return_pct"] > 0) / len(rows)})
         out["snr_sweep"]["fix" if fix else "scaffold"] = curve
 
+    # --- replay: "feed it back data until it catches up" — the same tape five times with the checkpoint carried,
+    #     exactly as observer_ea.py reloads observer_state.json (RealityState(**saved), prev_close reset) ---
+    out["replay"] = {}
+    for label, (te, tx) in (("smoke", smoke_tapes()), ("regime", make_world("regime", 1, BARS, snr=0.25, regime_len=40, couple=1.0))):
+        init = None
+        passes = []
+        first = None
+        for k in range(5):
+            r = run_observer(te, tx, init=init)
+            first = first or r
+            passes.append({"pass": k + 1, "final_value": r["final_value"], "detections": r["detections"],
+                           "decisions_changed_vs_pass1": sum(1 for a, b in zip(first["decisions"], r["decisions"]) if a != b),
+                           "criterion": [r["final_states"]["EURUSD"]["criterion"], r["final_states"]["XAUUSD"]["criterion"]],
+                           "alpha_e": r["final_states"]["EURUSD"]["alpha"], "fills": r["fills"], "accuracy": r["accuracy"],
+                           "traded_bars": r["traded_bars"],
+                           "first_commit_bar": next((i + 1 for i, d in enumerate(r["decisions"]) if d[0] or d[1]), None)})
+            init = r["final_states"]
+        out["replay"][label] = passes
+
     out["elapsed_s"] = (datetime.now() - t0).total_seconds()
     return out
 
