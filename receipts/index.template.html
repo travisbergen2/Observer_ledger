@@ -143,6 +143,7 @@
   <div class="card finding" style="margin-bottom:12px">
     <p class="big">4b · The detector cannot see, so nothing ever resets.</p>
     <p>An alarm fires when |innovation|·gain exceeds the criterion. But the innovation is standardised by a volatility that is a running average of the <em>true range</em> (about 1.8 σ of the close-to-close move) and that has already absorbed the very bar being judged: a 5 σ jump lands as an innovation of about 1.9, under a criterion of 2.5. On this run the detector fired <b id="f2det">…</b> times in <b id="f2bars">…</b> bar-steps; across the 24-seed census of §5 the median is <b id="f2med">…</b> detections per 1,000. Paper 18's whole coupling runs through this alarm — a detected change is what dumps the accumulator ("evidence answers an expired question", R-5), shortens the window (R-1) and raises the update rate (R-2). With the alarm silent, evidence never resets and the observer holds one direction for as long as it took to build it: the longest single-direction run here is <b id="f2lock">…</b>. Drag <b>detection criterion</b> in §1 down to 0.25× and watch the alarms, the resets and the direction changes appear together.</p>
+    <p>The update rate has the same single dependency. While no alarm fires the scaffold's window is 2/α, so its own rule α ← 0.995·α + 0.005/window reduces to <b>α ← 0.9975·α</b> exactly — a clock running down to the floor of 0.025 (window 80 bars) with no term that reads the tape. On the smoke tape α ends at 0.1 × 0.9975¹⁷⁹ = 0.0639, the value on the ledger to four digits. The "adaptive" estimate adapts only through the detector, and the detector is silent.</p>
   </div>
   <div class="card finding">
     <p class="big">4c · Learning raises a bar the observer never uses.</p>
@@ -170,7 +171,30 @@
 </section>
 
 <section>
-  <h2>7 · The fence</h2>
+  <h2>7 · The brief, and the ledger against it</h2>
+  <p class="sub">The scaffold was produced by an AI agent (Manus) in September 2026 from the brief below, in the author's words. What follows is the credit it earns: what was asked, what was delivered, and what this page measures.</p>
+  <div class="card">
+    <div class="quote">"I am wanting a Python EA with Backtrader based on my Observer Requirements, set up where a three-file system is set up that two of the systems are forced to build a reality model of EURUSD and XAUUSD for the third one to function and make decisions in, and it learns from experience — and I want to let it learn the market by feeding it back data until it catches up and figures it out. I am running it on Windows … it should be extended with realistic spread, commission, slippage, leverage, position sizing, walk-forward validation, drawdown controls, and a broker-specific execution adapter."</div>
+    <p class="small">The author's brief, lightly punctuated; the extension list in the last sentence was the agent's own suggestion, accepted.</p>
+    <table><thead><tr><th>asked</th><th>delivered</th><th>measured here</th><th>standing</th></tr></thead><tbody>
+      <tr><td>A Backtrader EA built on the Observer Requirements</td><td>A Backtrader strategy whose variables are named for the paper's knobs (alpha = UE, integration_window = TI, gain = SG, criterion = FT); its README says it "follows the paper's conditional synthesis: estimate, detect, and commit"</td><td>The three couplings the synthesis consists of are absent (§4). The README's sentence "a detected change resets evidence and temporarily increases the update rate" is true of a line of code and false of every run on this page, because the detection never comes</td><td>names delivered; couplings not</td></tr>
+      <tr><td>Two systems forced to build a reality model of each market</td><td>Two files, one algorithm with different constants; a drift estimate and a volatility per bar</td><td>The estimate block works (§2). The model is never asked whether it is right: feedback scores the trade, not the forecast; no forecast distribution, no calibration, no skill measure</td><td>shape delivered</td></tr>
+      <tr><td>…for the third to function and make decisions</td><td>The third raises unless exactly two feeds are present and lets each market veto the other</td><td>A veto is a gate, not a use of the models; the transcript's "blocked because the other market disagrees" sentence is unreachable</td><td>gate delivered</td></tr>
+      <tr><td>It learns from experience</td><td>Gain and criterion move on each acted bar's outcome</td><td>Learning changed 0 of 360 decisions on its own tape; the criterion ratchets toward its ceiling in every world below 80 % accuracy and is read only by a detector that never fires (§4c)</td><td>inert</td></tr>
+      <tr><td>Feed it back data until it catches up and figures it out</td><td>A JSON checkpoint carried between runs; <span class="k">walk_forward.py</span> trains on a segment and tests on the next with learning off</td><td>Replayed five times on its own tape with the checkpoint carried (computed here): euro criterion <b id="r5crit">…</b>; detections in pass 5 <b id="r5det">…</b>; decisions changed against pass 1 <b id="r5dec">…</b>; update rate α after pass 5 <b id="r5alpha">…</b>. On the regime world, seed 1: <span id="r5reg">…</span>. "Catching up" has no definition in the code; each pass leaves the detector deafer and the estimate slower, and changes nothing the observer does</td><td>inverted</td></tr>
+      <tr><td>Windows</td><td>PowerShell commands, the <span class="k">py</span> launcher, a venv</td><td>—</td><td>delivered</td></tr>
+      <tr><td>Realistic spread, commission, slippage</td><td>Half-spread folded into Backtrader's percentage slippage, commission on notional, a <span class="k">SyntheticBroker</span> that charges both</td><td>Present, with generic defaults the README says to replace; the friction it charges is the one term in the ledger that is never in doubt (§1)</td><td>delivered (defaults)</td></tr>
+      <tr><td>Leverage, position sizing</td><td>Risk-fraction sizing against a volatility stop proxy, capped at 3×</td><td>The cap held in sizing and failed in execution: stacked orders filled at once for a −580 oz short, 14× equity (§6). The stop exists as a number for sizing, never as an order</td><td>delivered on paper</td></tr>
+      <tr><td>Walk-forward validation</td><td>Chronological train/test windows, learning off in test</td><td>Returns only — no baseline, no forecast metric, no exposure accounting</td><td>minimal</td></tr>
+      <tr><td>Drawdown controls</td><td>A 20 % peak-to-equity halt that flattens and stops trading</td><td>Fired on its own tape because of the row above; no daily limit</td><td>minimal</td></tr>
+      <tr><td>A broker-specific execution adapter</td><td>An interface, a paper adapter, and a stub that refuses: "a concrete adapter cannot be safely invented without knowing the broker, symbol format, account currency, contract size, margin rules …"</td><td>The one place the build declined to pretend</td><td>correctly declined</td></tr>
+    </tbody></table>
+    <p class="small" style="margin-top:8px">Credit where it is earned: the refusal in the last row, the "anticipated, not realized" labelling in the transcript, and the fee mechanics are sound. The rest is a set of correctly named parts whose names describe the paper and not the behaviour. The design that would deliver the brief is a separate document; nothing of it is on this page.</p>
+  </div>
+</section>
+
+<section>
+  <h2>8 · The fence</h2>
   <div class="card fence">
     <p class="big">Everything here is a finite computation on a synthetic tape. Nothing here is evidence about a market, and a positive number in §1 is not an edge.</p>
     <p><b>No real prices.</b> The scaffold shipped none and this room uses none; the worlds are named generators with seeds. A world in which drift persists at 0.25 σ per bar for 40 bars is a within-regime Sharpe ratio near 4 — the observer is being tested on tapes far kinder than any it would meet.</p>
@@ -194,7 +218,7 @@
     <li>T. Bergen, <i>Observer Requirements: Deriving the Receiver Laws from Bounded Estimation</i>, IMM Paper 18 (Open Series, 2026) — A-OR-1…10, R-1…R-5, the three-block synthesis T-OR-1, the reset pathway, and §11(8): "Nothing in this paper creates trading edge; estimation is not edge, and no profitability claim is made or implied." Part of the <a href="https://doi.org/10.5281/zenodo.19697792" target="_blank" rel="noopener noreferrer">Information Manifold Model series</a>.</li>
     <li>T. Bergen, <i>The Market as Receiver Environment — Chart Measurement, Two Registered Negative Results, and the Boundary Class</i>, IMM Paper 20, <a href="https://doi.org/10.5281/zenodo.21702296" target="_blank" rel="noopener noreferrer">10.5281/zenodo.21702296</a> — the programme's registered negative results on market edge.</li>
     <li>T. Bergen, <i>RPCS-1</i>, IMM Paper 9 — the five receiver primitives TI, SG, FT, UE, AR that Paper 18 re-derives as a parameterisation of three blocks.</li>
-    <li>The scaffold: <span class="k">eurusd_reality.py</span>, <span class="k">xauusd_reality.py</span>, <span class="k">observer_ea.py</span>, <span class="k">walk_forward.py</span>, <span class="k">broker_adapter.py</span>, <span class="k">make_smoke_data.py</span> — an AI-assisted build produced for the author in September 2026 from Paper 18, committed verbatim under <span class="k">receipts/ea/</span>; its own README calls it "a research and paper-backtest scaffold, not a live-trading bot" and "not a promise of profitability".</li>
+    <li>The scaffold: <span class="k">eurusd_reality.py</span>, <span class="k">xauusd_reality.py</span>, <span class="k">observer_ea.py</span>, <span class="k">walk_forward.py</span>, <span class="k">broker_adapter.py</span>, <span class="k">make_smoke_data.py</span> — produced by an AI agent (Manus) in September 2026 from the brief quoted in §7, committed verbatim under <span class="k">receipts/ea/</span> with sha256 receipts; its own README calls it "a research and paper-backtest scaffold, not a live-trading bot" and "not a promise of profitability". The ledger in §7 is the credit it earns.</li>
     <li>Backtrader 1.9.78.123 (D. Rodríguez, <a href="https://www.backtrader.com/" target="_blank" rel="noopener noreferrer">backtrader.com</a>) — the framework the scaffold targets; market orders fill at the next bar's open; pending orders are not cancelled by a new submission.</li>
     <li>A. Wald and J. Wolfowitz, <i>Optimum character of the sequential probability ratio test</i>, Ann. Math. Statist. 19 (1948) 326–339 — the optimality of accumulate-to-bound commitment that Paper 18's R-5 cites for the Commit block.</li>
     <li>The companion room: <a href="https://travisbergen2.github.io/Bergen-s_Game_of_Life/">Bergen's Game of Life</a> (Room IV), where the same five dials live on a grid.</li>
@@ -809,6 +833,31 @@
       row('census ' + key + ' · median accuracy', q(col(rows2, 'accuracy'), 0.5), T.accuracy.median); row('census ' + key + ' · first-seed return', rows2[0].return_pct, TWIN.ensembles[key].returns[0]);
     });
     ['scaffold', 'fix'].forEach(function (rule) { CENSUS.snr_sweep[rule].forEach(function (p, k) { var T = TWIN.snr_sweep[rule][k]; row('sweep ' + rule + ' · snr ' + p.snr.toFixed(2) + ' · median return', p.median_return_pct, T.median_return_pct); }); });
+    // replay: the same tape five times with the checkpoint carried, exactly as observer_ea.py reloads observer_state.json
+    function replay(tapes) {
+      var init = null, passes = [], first = null;
+      for (var k = 0; k < 5; k++) {
+        var rr = runObserver(tapes[0], tapes[1], { init: init });
+        if (!first) first = rr;
+        passes.push({ final_value: rr.final_value, detections: rr.detections, criterion: [rr.final_states.EURUSD.criterion, rr.final_states.XAUUSD.criterion],
+          alpha_e: rr.final_states.EURUSD.alpha, fills: rr.fills, changed: decisionsChanged(first, rr) });
+        init = { EURUSD: Object.assign({}, rr.final_states.EURUSD), XAUUSD: Object.assign({}, rr.final_states.XAUUSD) };
+      }
+      return passes;
+    }
+    var RS = replay(sm), RR = replay(makeWorld('regime', 1, BARS, { snr: 0.25, regime_len: 40, couple: 1.0 }));
+    [RS, RR].forEach(function (P, j) {
+      var lab = j ? 'replay regime seed 1' : 'replay smoke', T = TWIN.replay[j ? 'regime' : 'smoke'];
+      row(lab + ' · pass 2 · euro criterion', P[1].criterion[0], T[1].criterion[0]); row(lab + ' · pass 5 · euro criterion', P[4].criterion[0], T[4].criterion[0]);
+      row(lab + ' · pass 5 · gold criterion', P[4].criterion[1], T[4].criterion[1]); row(lab + ' · pass 5 · α euro', P[4].alpha_e, T[4].alpha_e);
+      row(lab + ' · pass 5 · detections', P[4].detections, T[4].detections); row(lab + ' · pass 5 · fills', P[4].fills, T[4].fills);
+      row(lab + ' · pass 5 · final equity', P[4].final_value, T[4].final_value); row(lab + ' · decisions changed, pass 1 → 5', P[4].changed, T[4].decisions_changed_vs_pass1);
+    });
+    document.getElementById('r5crit').textContent = RS[0].criterion[0].toFixed(3) + ' → ' + RS[1].criterion[0].toFixed(3) + ' → ' + RS[4].criterion[0].toFixed(3) + ' over passes 1, 2, 5 (gold ' + RS[4].criterion[1].toFixed(3) + ' — its ceiling)';
+    document.getElementById('r5det').textContent = (RS[4].detections[0] + RS[4].detections[1]) + ' in 360 bar-steps';
+    document.getElementById('r5dec').textContent = RS[4].changed + ' of 180 bars';
+    document.getElementById('r5alpha').textContent = RS[4].alpha_e.toFixed(4) + ' (the floor; window ' + (2 / RS[4].alpha_e).toFixed(0) + ' bars, from 20)';
+    document.getElementById('r5reg').textContent = 'euro criterion ' + RR[0].criterion[0].toFixed(3) + ' after one pass (already the ceiling), ' + RR[4].changed + ' of 500 decisions changed by pass 5, equity ' + fmtUsd(RR[4].final_value) + ' against ' + fmtUsd(RR[0].final_value) + ' on pass 1';
     document.getElementById('rtab').innerHTML = rows.join('');
     var total = rows.length;
     document.getElementById('selfcheck').innerHTML = '<span class="' + (pass === total ? 'pass' : 'fail') + '">' + pass + ' / ' + total + ' recomputed values agree with the Python twin and the Backtrader receipt</span> · <span class="' + (same === 2 * BT.decisions.length ? 'pass' : 'fail') + '">' + same + ' / ' + (2 * BT.decisions.length) + ' smoke-tape decisions identical to the unmodified scaffold under Backtrader</span>';
