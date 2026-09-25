@@ -2641,5 +2641,221 @@
    }
   ]
  },
- "elapsed_s": 20.176532
+ "replay": {
+  "smoke": [
+   {
+    "pass": 1,
+    "final_value": 100778.25906304878,
+    "detections": [
+     0,
+     0
+    ],
+    "decisions_changed_vs_pass1": 0,
+    "criterion": [
+     3.5750000000000086,
+     3.8750000000000084
+    ],
+    "alpha_e": 0.06388661534635978,
+    "fills": 159,
+    "accuracy": 0.4928571428571429,
+    "traded_bars": [
+     141,
+     141
+    ],
+    "first_commit_bar": 40
+   },
+   {
+    "pass": 2,
+    "final_value": 100778.20805637861,
+    "detections": [
+     0,
+     0
+    ],
+    "decisions_changed_vs_pass1": 0,
+    "criterion": [
+     4.5,
+     4.9499999999999895
+    ],
+    "alpha_e": 0.040814996204137324,
+    "fills": 159,
+    "accuracy": 0.4928571428571429,
+    "traded_bars": [
+     141,
+     141
+    ],
+    "first_commit_bar": 40
+   },
+   {
+    "pass": 3,
+    "final_value": 100778.20805637861,
+    "detections": [
+     0,
+     0
+    ],
+    "decisions_changed_vs_pass1": 0,
+    "criterion": [
+     4.5,
+     5.0
+    ],
+    "alpha_e": 0.026075319628568523,
+    "fills": 159,
+    "accuracy": 0.4928571428571429,
+    "traded_bars": [
+     141,
+     141
+    ],
+    "first_commit_bar": 40
+   },
+   {
+    "pass": 4,
+    "final_value": 100778.20805637861,
+    "detections": [
+     0,
+     0
+    ],
+    "decisions_changed_vs_pass1": 0,
+    "criterion": [
+     4.5,
+     5.0
+    ],
+    "alpha_e": 0.025,
+    "fills": 159,
+    "accuracy": 0.4928571428571429,
+    "traded_bars": [
+     141,
+     141
+    ],
+    "first_commit_bar": 40
+   },
+   {
+    "pass": 5,
+    "final_value": 100778.20805637861,
+    "detections": [
+     0,
+     0
+    ],
+    "decisions_changed_vs_pass1": 0,
+    "criterion": [
+     4.5,
+     5.0
+    ],
+    "alpha_e": 0.025,
+    "fills": 159,
+    "accuracy": 0.4928571428571429,
+    "traded_bars": [
+     141,
+     141
+    ],
+    "first_commit_bar": 40
+   }
+  ],
+  "regime": [
+   {
+    "pass": 1,
+    "final_value": 113095.53342018131,
+    "detections": [
+     0,
+     0
+    ],
+    "decisions_changed_vs_pass1": 0,
+    "criterion": [
+     4.5,
+     5.0
+    ],
+    "alpha_e": 0.028677367050662723,
+    "fills": 748,
+    "accuracy": 0.5402173913043479,
+    "traded_bars": [
+     461,
+     461
+    ],
+    "first_commit_bar": 40
+   },
+   {
+    "pass": 2,
+    "final_value": 113095.48017010104,
+    "detections": [
+     0,
+     0
+    ],
+    "decisions_changed_vs_pass1": 0,
+    "criterion": [
+     4.5,
+     5.0
+    ],
+    "alpha_e": 0.025,
+    "fills": 748,
+    "accuracy": 0.5402173913043479,
+    "traded_bars": [
+     461,
+     461
+    ],
+    "first_commit_bar": 40
+   },
+   {
+    "pass": 3,
+    "final_value": 113095.48017010104,
+    "detections": [
+     0,
+     0
+    ],
+    "decisions_changed_vs_pass1": 0,
+    "criterion": [
+     4.5,
+     5.0
+    ],
+    "alpha_e": 0.025,
+    "fills": 748,
+    "accuracy": 0.5402173913043479,
+    "traded_bars": [
+     461,
+     461
+    ],
+    "first_commit_bar": 40
+   },
+   {
+    "pass": 4,
+    "final_value": 113095.48017010104,
+    "detections": [
+     0,
+     0
+    ],
+    "decisions_changed_vs_pass1": 0,
+    "criterion": [
+     4.5,
+     5.0
+    ],
+    "alpha_e": 0.025,
+    "fills": 748,
+    "accuracy": 0.5402173913043479,
+    "traded_bars": [
+     461,
+     461
+    ],
+    "first_commit_bar": 40
+   },
+   {
+    "pass": 5,
+    "final_value": 113095.48017010104,
+    "detections": [
+     0,
+     0
+    ],
+    "decisions_changed_vs_pass1": 0,
+    "criterion": [
+     4.5,
+     5.0
+    ],
+    "alpha_e": 0.025,
+    "fills": 748,
+    "accuracy": 0.5402173913043479,
+    "traded_bars": [
+     461,
+     461
+    ],
+    "first_commit_bar": 40
+   }
+  ]
+ },
+ "elapsed_s": 20.128328
 }
