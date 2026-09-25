@@ -68,5 +68,23 @@ for (const rule of ['scaffold', 'fix']) for (let k = 0; k < lib.SNR_GRID.length;
   for (const seed of lib.SEEDS) { const tapes = lib.makeWorld('regime', seed, lib.BARS, { snr: lib.SNR_GRID[k], regime_len: 40, couple: 1.0 }); rows.push(lib.flat(lib.runObserver(tapes[0], tapes[1], { commit_fix: rule === 'fix' }))); }
   cmp('sweep ' + rule + ' ' + lib.SNR_GRID[k], lib.q(lib.col(rows, 'return_pct'), 0.5), TWIN.snr_sweep[rule][k].median_return_pct);
 }
+// replay: five passes with the checkpoint carried
+for (const lab of ['smoke', 'regime']) {
+  const tapes = lab === 'smoke' ? lib.smokeTapes() : lib.makeWorld('regime', 1, lib.BARS, { snr: 0.25, regime_len: 40, couple: 1.0 });
+  let init = null, first = null;
+  for (let k = 0; k < 5; k++) {
+    const rr = lib.runObserver(tapes[0], tapes[1], { init });
+    if (!first) first = rr;
+    const T = TWIN.replay[lab][k];
+    cmp(lab + ' replay pass ' + (k + 1) + ' crit E', rr.final_states.EURUSD.criterion, T.criterion[0]);
+    cmp(lab + ' replay pass ' + (k + 1) + ' crit X', rr.final_states.XAUUSD.criterion, T.criterion[1]);
+    cmp(lab + ' replay pass ' + (k + 1) + ' alpha E', rr.final_states.EURUSD.alpha, T.alpha_e);
+    cmp(lab + ' replay pass ' + (k + 1) + ' fv', rr.final_value, T.final_value);
+    cmp(lab + ' replay pass ' + (k + 1) + ' fills', rr.fills, T.fills);
+    let changed = 0; for (let i = 0; i < rr.decisions.length; i++) if (rr.decisions[i][0] !== first.decisions[i][0] || rr.decisions[i][1] !== first.decisions[i][1]) changed++;
+    cmp(lab + ' replay pass ' + (k + 1) + ' changed', changed, T.decisions_changed_vs_pass1);
+    init = { EURUSD: Object.assign({}, rr.final_states.EURUSD), XAUUSD: Object.assign({}, rr.final_states.XAUUSD) };
+  }
+}
 console.log(`node_check: ${checks - fails} / ${checks} agree with the twin (worst relative difference ${worst.toExponential(2)})`);
 process.exit(fails ? 1 : 0);
