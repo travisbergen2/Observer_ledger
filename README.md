@@ -1,9 +1,8 @@
 # Room X — WITHDRAWN (26 September 2026)
 
 **Status:** withdrawn by the author on 2026-09-26; the live page at https://fractalyouniverse.org/Observer_ledger/
-now carries a withdrawal notice. The room is being rebuilt as an instrument in its own right (a network of
-quadratic-pair nodes read by a bounded observer whose prior starts blank — the `node_observer` model) and
-will return when ready.
+now carries a withdrawal notice. The room has been rebuilt as an instrument in its own right: **The Bounded Receiver**,
+https://fractalyouniverse.org/Bounded_receiver/ (repo travisbergen2/Bounded_receiver).
 
 **Why:** the first version ran a third-party trading scaffold against the three coupled blocks of IMM
 Paper 18 (*Observer Requirements*) and documented where the scaffold fell short. That is a critique
